@@ -8,6 +8,7 @@ namespace DA_Game0090
         [SerializeField] private Camera aimCamera;
         [SerializeField] private Transform projectileSpawnPoint;
         [SerializeField] private ProjectileMotor projectilePrefab;
+        [SerializeField] private TrajectoryPredictor trajectoryPredictor;
 
         [Header("Launch")]
         [SerializeField] private float launchPower = 6f;
@@ -34,6 +35,7 @@ namespace DA_Game0090
                 {
                     isDragging = true;
                     dragStartWorld = ScreenToWorldOnPlane(screenPosition);
+                    trajectoryPredictor?.ClearTrajectory();
                 }
 
                 if (isDragging)
@@ -50,8 +52,18 @@ namespace DA_Game0090
                         }
 
                         isDragging = false;
+                        trajectoryPredictor?.ClearTrajectory();
+                    }
+                    else
+                    {
+                        UpdateTrajectory(screenPosition);
                     }
                 }
+            }
+            else if (isDragging)
+            {
+                isDragging = false;
+                trajectoryPredictor?.ClearTrajectory();
             }
         }
 
@@ -62,12 +74,38 @@ namespace DA_Game0090
                 return;
             }
 
-            Vector3 direction = dragVector.normalized;
-            float power = Mathf.Clamp(dragVector.magnitude * launchPower, 0f, maxLaunchPower);
-            Vector3 velocity = direction * power;
+            Vector3 velocity = GetLaunchVelocity(dragVector);
 
             ProjectileMotor projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
             projectile.Launch(velocity);
+        }
+
+        private void UpdateTrajectory(Vector2 screenPosition)
+        {
+            if (trajectoryPredictor == null || projectileSpawnPoint == null)
+            {
+                return;
+            }
+
+            Vector3 dragEndWorld = ScreenToWorldOnPlane(screenPosition);
+            Vector3 dragVector = dragEndWorld - dragStartWorld;
+            dragVector.z = 0f;
+
+            if (dragVector.magnitude < minimumDragDistance)
+            {
+                trajectoryPredictor.ClearTrajectory();
+                return;
+            }
+
+            Vector3 velocity = GetLaunchVelocity(dragVector);
+            trajectoryPredictor.RenderTrajectory(projectileSpawnPoint.position, velocity);
+        }
+
+        private Vector3 GetLaunchVelocity(Vector3 dragVector)
+        {
+            Vector3 direction = dragVector.normalized;
+            float power = Mathf.Clamp(dragVector.magnitude * launchPower, 0f, maxLaunchPower);
+            return direction * power;
         }
 
         private Vector3 ScreenToWorldOnPlane(Vector2 screenPosition)
