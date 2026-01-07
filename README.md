@@ -13,6 +13,8 @@ Unity URP 2.5D prototype (Android) with drag-to-aim shooting, a spherecast proje
    - Create an empty `GameObject` named `Launcher` at `Z = 0` and add **PlayerAimShoot**.
    - Assign the `Aim Camera` to `Main Camera`.
    - Create a child empty `Transform` named `ProjectileSpawn` at the muzzle position and assign it.
+   - (Optional) Add **TrajectoryPredictor** to `Launcher` and create a child `LineRenderer` (set a faint material/width).
+   - Assign the `LineRenderer` to **TrajectoryPredictor** and then assign **TrajectoryPredictor** on **PlayerAimShoot**.
 5. Projectile prefab
    - Create a `Sphere` prefab named `Projectile`.
    - Add **ProjectileMotor**.
@@ -41,6 +43,7 @@ main
 - `CameraOrientationController` switches between portrait/landscape camera profiles automatically.
 - `PlayerAimShoot` handles drag-to-aim and spawn/launch.
 - `ProjectileMotor` uses SphereCast each frame with gravity, drag, and collision responses.
+- `TrajectoryPredictor` renders a LineRenderer-based aim arc using the same ballistic model.
 - `ProjectileImpactResponse` overrides collision behavior per target.
 codex/create-unity-urp-2.5d-prototype-for-android-72fn2a
 - `UIManager` swaps HUD prefabs based on orientation and applies safe area padding.
