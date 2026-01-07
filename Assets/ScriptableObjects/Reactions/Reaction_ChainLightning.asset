@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_Script: {fileID: 11500000, guid: e3a4b5c6d7e8f9012a3b4c5d6e7f8091, type: 3}
+  m_Name: Reaction_ChainLightning
+  m_EditorClassIdentifier: 
+  requiredElements:
+  - {fileID: 11400000, guid: 55555555555555555555555555555555, type: 2}
+  - {fileID: 11400000, guid: 33333333333333333333333333333333, type: 2}
+  resultType: 0
+  resultDescription: Wet + Lightning = Chain Lightning
+  consumeAllBuildup: 1
+  consumeAmount: 50
